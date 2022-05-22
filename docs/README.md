@@ -56,7 +56,7 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 
 #### Defined in
 
-src/lib/index.ts:6
+[src/lib/index.ts:6](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L6)
 
 ## Functions
 
@@ -98,4 +98,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-src/lib/index.ts:151
+[src/lib/index.ts:151](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L151)

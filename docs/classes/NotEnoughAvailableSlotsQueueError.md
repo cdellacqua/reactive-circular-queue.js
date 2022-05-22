@@ -49,7 +49,7 @@ Error.constructor
 
 #### Defined in
 
-src/lib/index.ts:128
+[src/lib/index.ts:128](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L128)
 
 ## Properties
 
