@@ -2,6 +2,25 @@ import {expect} from 'chai';
 import {makeCircularQueue} from '../src/lib/index';
 
 describe('examples', () => {
+	it('readme 0', () => {
+		// Create an empty queue that can hold up to 3 items.
+		const queue1 = makeCircularQueue<string>(3);
+		expect(queue1.capacity).to.eq(3); // 3
+		expect(queue1.filledSlots).to.eq(0); // 0
+		// Create a full queue that can hold up to 3 items (deduced from the array length).
+		const queue2 = makeCircularQueue(['hello', 'world', '!']);
+		expect(queue2.capacity).to.eq(3); // 3
+		expect(queue2.filledSlots).to.eq(3); // 3
+		// Create an almost full queue that can hold up to 3 items (as per the second argument).
+		const queue3 = makeCircularQueue(['hello', 'world'], 3);
+		expect(queue3.capacity).to.eq(3); // 3
+		expect(queue3.filledSlots).to.eq(2); // 2
+		// Create a full queue that can hold up to 2 items (as per the second argument).
+		const queue4 = makeCircularQueue(['hello', 'world', '!'], 2);
+		expect(queue4.capacity).to.eq(2); // 2
+		expect(queue4.filledSlots).to.eq(2); // 2, only 'hello' and 'world' were copied inside the queue.
+		expect(queue4.toArray().join(', ')).to.eq('hello, world');
+	});
 	it('readme 1', () => {
 		const queue = makeCircularQueue<string>(3);
 		queue.enqueue('hello');
@@ -68,5 +87,17 @@ describe('examples', () => {
 			expect(queue.filledSlots).to.eq(1 - i); // prints 1, then 0
 			i++;
 		}
+	});
+	it('readme 8', () => {
+		const queue = makeCircularQueue<string>(1);
+		queue.enqueue('hello');
+		queue.replace(0, 'world');
+		expect(queue.dequeue()).to.eq('world'); // world
+	});
+	it('readme 9', () => {
+		const queue = makeCircularQueue(['hello', 'world']);
+		expect(queue.capacity).to.eq(2);
+		expect(queue.dequeue()).to.eq('hello'); // hello
+		expect(queue.dequeue()).to.eq('world'); // world
 	});
 });

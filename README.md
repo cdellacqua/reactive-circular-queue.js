@@ -23,7 +23,8 @@ array. It's often used to implement First In-First Out queues.
 - `dequeueAll()`, to dequeue all elements at once;
 - `clear()`, to remove all elements from the queue;
 - `toArray()`, to create an array containing the elements in the queue;
-- `at(index)`, to read (without dequeueing) an element in the queue at a given index (positive or negative) with respect to occupied slots;
+- `at(index)`, to read (without dequeueing) an element in the queue at a given index (positive or negative);
+- `replace(index, item)`, to replace (without affecting the queue size) an element in the queue at a given index (positive or negative);
 - `iter()`, to get an iterator that dequeues elements one at a time (it also supports `Symbol.iterator`, see the example below).
 
 It also provides the following getters:
@@ -37,6 +38,34 @@ It also provides the following getters:
 Each getters has a corresponding [`ReadonlyStore`](https://www.npmjs.com/package/universal-stores): `availableSlots$`, `filledSlots$`, `capacity$`, `full$`, `empty$`.
 
 These stores make this circular queue implementation reactive.
+
+This library provides a function called `makeCircularQueue` to create `CircularQueue<T>` objects.
+This function has two overloads:
+- `makeCircularQueue(capacity)`, which takes the maximum size of the queue as its only parameter;
+- `makeCircularQueue(array, capacity)`, which takes an array that will be used to initialize the
+queue as its first parameter and a second optional parameter which is the capacity of the queue.
+If the capacity is not passed, the array length will be used to determine the maximum queue size.
+
+```ts
+import {makeCircularQueue} from 'reactive-circular-queue';
+
+// Create an empty queue that can hold up to 3 items.
+const queue1 = makeCircularQueue<string>(3);
+console.log(queue1.capacity); // 3
+console.log(queue1.filledSlots); // 0
+// Create a full queue that can hold up to 3 items (deduced from the array length).
+const queue2 = makeCircularQueue(['hello', 'world', '!']);
+console.log(queue2.capacity); // 3
+console.log(queue2.filledSlots); // 3
+// Create an almost full queue that can hold up to 3 items (as per the second argument).
+const queue3 = makeCircularQueue(['hello', 'world'], 3);
+console.log(queue3.capacity); // 3
+console.log(queue3.filledSlots); // 2
+// Create a full queue that can hold up to 2 items (as per the second argument).
+const queue4 = makeCircularQueue(['hello', 'world', '!'], 2);
+console.log(queue4.capacity); // 2
+console.log(queue4.filledSlots); // 2, only 'hello' and 'world' were copied inside the queue.
+```
 
 ### Examples
 
@@ -105,6 +134,15 @@ console.log(queue.at(1)); // world
 console.log(queue.at(2)); // undefined
 console.log(queue.at(-1)); // world
 console.log(queue.at(-2)); // hello
+```
+
+Usage of `replace(i, item)`:
+
+```ts
+const queue = makeCircularQueue<string>(1);
+queue.enqueue('hello');
+queue.replace(0, 'world');
+console.log(queue.dequeue()); // world
 ```
 
 Usage with `for..of` (`[Symbol.iterator]()`):

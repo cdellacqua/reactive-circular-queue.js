@@ -99,17 +99,29 @@ export type CircularQueue<T> = {
 	 */
 	toArray(): T[];
 	/**
-	 * Return an element inside a queue given an index.
+	 * Return an element of a queue given an index.
 	 * The index can be positive or negative.
-	 * If the index is positive it counts forwards from the head of the queue,
-	 * if it's negative it counts backwards from the tail of the queue.
+	 * If the index is positive, it counts forwards from the head of the queue,
+	 * if it's negative, it counts backwards from the tail of the queue.
 	 * As an example q.at(-1) returns the last enqueued element.
 	 *
-	 * Note: if the index is out of bound this method returns undefined.
+	 * Note: if the index is out of bounds, this method returns undefined.
 	 *
 	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
 	 */
 	at(positiveOrNegativeIndex: number): T | undefined;
+	/**
+	 * Replace the element of a queue at the given index.
+	 * The index can be positive or negative.
+	 * If the index is positive, it counts forwards from the head of the queue,
+	 * if it's negative, it counts backwards from the tail of the queue.
+	 * As an example q.replace(-1, 'hello') replaces the last enqueued element,
+	 * while q.replace(0, 'hello') replaces the first element.
+	 *
+	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
+	 * @throws {RangeError} if the index is incompatible with the current queue size (i.e. the number of filled slots).
+	 */
+	replace(positiveOrNegativeIndex: number, item: T): void;
 };
 
 /**
@@ -148,7 +160,31 @@ export class NotEnoughAvailableSlotsQueueError extends Error {
  * @param capacity the number of slots to allocate for this queue.
  * @returns a {@link CircularQueue}
  */
-export function makeCircularQueue<T>(capacity: number): CircularQueue<T> {
+export function makeCircularQueue<T>(capacity: number): CircularQueue<T>;
+
+/**
+ * Create a circular queue and initialize it with
+ * elements from an array. If the capacity (second optional parameter) is not passed,
+ * the array length will be used to determine the maximum queue size.
+ *
+ * Example usage:
+ * ```ts
+ * const queue = makeCircularQueue(['hello', 'world']);
+ * console.log(queue.dequeue()); // hello
+ * console.log(queue.dequeue()); // world
+ * ```
+ *
+ * @param fromArray an array used to initialize the queue.
+ * @param capacity (optional) the maximum queue size. If the array length is greater than the capacity,
+ * the extra elements will be ignored.
+ * @returns a {@link CircularQueue}
+ */
+export function makeCircularQueue<T>(fromArray: T[], capacity?: number): CircularQueue<T>;
+
+export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapacity?: number): CircularQueue<T> {
+	const isArray = Array.isArray(capacityOrArray);
+	const capacity = isArray ? optionalCapacity ?? capacityOrArray.length : capacityOrArray;
+
 	let queue = new Array<T | undefined>(capacity);
 
 	let head = 0;
@@ -157,6 +193,15 @@ export function makeCircularQueue<T>(capacity: number): CircularQueue<T> {
 	const full$ = makeDerivedStore(filledSlots$, (filled) => filled === capacity);
 	const empty$ = makeDerivedStore(filledSlots$, (filled) => filled === 0);
 	const availableSlots$ = makeDerivedStore(filledSlots$, (filled) => capacity - filled);
+
+	if (isArray) {
+		const copyableItems = Math.min(capacityOrArray.length, capacity);
+		for (let i = 0; i < copyableItems; i++) {
+			queue[tail] = capacityOrArray[i];
+			tail = (tail + 1) % capacity;
+		}
+		filledSlots$.update((n) => n + copyableItems);
+	}
 
 	const enqueue = (v: T) => {
 		if (full$.value) {
@@ -241,6 +286,18 @@ export function makeCircularQueue<T>(capacity: number): CircularQueue<T> {
 		}
 	};
 
+	const replace = (i: number, item: T) => {
+		const filled = filledSlots$.value;
+		if (i >= filled || i < -filled) {
+			throw new RangeError(`${i} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
+		}
+		if (i >= 0) {
+			queue[(head + i) % capacity] = item;
+		} else {
+			queue[(head + filled + i) % capacity] = item;
+		}
+	};
+
 	return {
 		enqueue,
 		enqueueMulti,
@@ -248,6 +305,7 @@ export function makeCircularQueue<T>(capacity: number): CircularQueue<T> {
 		dequeueAll,
 		toArray,
 		at,
+		replace,
 		get availableSlots() {
 			return availableSlots$.value;
 		},

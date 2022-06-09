@@ -10,6 +10,52 @@ describe('circular queue', () => {
 		expect(q.empty).to.be.true;
 		expect(q.full).to.be.true;
 	});
+	it('constructs a queue from an array', () => {
+		const q = makeCircularQueue([0, 1, 2, 3]);
+		expect(q.availableSlots).to.eq(0);
+		expect(q.filledSlots).to.eq(4);
+		expect(q.capacity).to.eq(4);
+		expect(q.dequeue()).to.eq(0);
+		expect(q.dequeue()).to.eq(1);
+		expect(q.dequeue()).to.eq(2);
+		expect(q.dequeue()).to.eq(3);
+		expect(q.availableSlots).to.eq(4);
+		expect(q.filledSlots).to.eq(0);
+		expect(q.capacity).to.eq(4);
+	});
+	it('constructs a queue from an array, but specifies a capacity greater than its length', () => {
+		const q = makeCircularQueue([0, 1, 2, 3], 7);
+		expect(q.availableSlots).to.eq(3);
+		expect(q.filledSlots).to.eq(4);
+		expect(q.capacity).to.eq(7);
+		q.enqueue(4);
+		q.enqueue(5);
+		q.enqueue(6);
+		expect(q.availableSlots).to.eq(0);
+		expect(q.filledSlots).to.eq(7);
+		expect(q.capacity).to.eq(7);
+		expect(q.dequeue()).to.eq(0);
+		expect(q.dequeue()).to.eq(1);
+		expect(q.dequeue()).to.eq(2);
+		expect(q.dequeue()).to.eq(3);
+		expect(q.dequeue()).to.eq(4);
+		expect(q.dequeue()).to.eq(5);
+		expect(q.dequeue()).to.eq(6);
+		expect(q.availableSlots).to.eq(7);
+		expect(q.filledSlots).to.eq(0);
+		expect(q.capacity).to.eq(7);
+	});
+	it('constructs a queue from an array, but specifies a capacity less than its length', () => {
+		const q = makeCircularQueue([0, 1, 2, 3], 2);
+		expect(q.availableSlots).to.eq(0);
+		expect(q.filledSlots).to.eq(2);
+		expect(q.capacity).to.eq(2);
+		expect(q.dequeue()).to.eq(0);
+		expect(q.dequeue()).to.eq(1);
+		expect(q.availableSlots).to.eq(2);
+		expect(q.filledSlots).to.eq(0);
+		expect(q.capacity).to.eq(2);
+	});
 	it('checks the getters', () => {
 		const q = makeCircularQueue<number>(1);
 
@@ -276,6 +322,34 @@ describe('circular queue', () => {
 		expect(q.at(-5)).to.eq(2);
 		expect(q.at(100)).to.be.undefined;
 		expect(q.at(-100)).to.be.undefined;
+	});
+	it('tests replace(i, item)', () => {
+		const q = makeCircularQueue<number>(5);
+		expect(q.filledSlots).to.eq(0);
+		expect(() => q.replace(0, 1)).to.throw(RangeError);
+		expect(() => q.replace(-1, 1)).to.throw(RangeError);
+		expect(() => q.replace(1, 1)).to.throw(RangeError);
+		expect(() => q.replace(-2, 1)).to.throw(RangeError);
+		q.enqueue(1);
+		expect(q.filledSlots).to.eq(1);
+		expect(q.at(0)).to.eq(1);
+		q.replace(0, 2);
+		expect(q.filledSlots).to.eq(1);
+		expect(q.at(0)).to.eq(2);
+		q.replace(-1, 3);
+		expect(q.at(0)).to.eq(3);
+		expect(() => q.replace(-2, 4)).to.throw(RangeError);
+		q.enqueue(10);
+		expect(q.filledSlots).to.eq(2);
+		expect(q.at(1)).to.eq(10);
+		q.replace(1, 20);
+		expect(q.at(1)).to.eq(20);
+		q.replace(-1, 30);
+		expect(q.at(1)).to.eq(30);
+		q.replace(-2, 40);
+		expect(q.at(0)).to.eq(40);
+		expect(() => q.replace(-3, 4)).to.throw(RangeError);
+		expect(q.filledSlots).to.eq(2);
 	});
 	it('dequeues passing the number of items to remove', () => {
 		const q = makeCircularQueue<number>(5);

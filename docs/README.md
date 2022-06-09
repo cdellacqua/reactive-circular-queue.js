@@ -52,6 +52,7 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 | `enqueue` | (`v`: `T`) => `void` | - |
 | `enqueueMulti` | (`v`: `T`[]) => `void` | - |
 | `iter` | () => `Iterator`<`T`, `any`, `undefined`\> | - |
+| `replace` | (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `void` | - |
 | `toArray` | () => `T`[] | - |
 
 #### Defined in
@@ -98,4 +99,40 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:151](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L151)
+[src/lib/index.ts:163](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L163)
+
+▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
+
+Create a circular queue and initialize it with
+elements from an array. If the capacity (second optional parameter) is not passed,
+the array length will be used to determine the maximum queue size.
+
+Example usage:
+```ts
+const queue = makeCircularQueue(['hello', 'world']);
+console.log(queue.dequeue()); // hello
+console.log(queue.dequeue()); // world
+```
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `fromArray` | `T`[] | an array used to initialize the queue. |
+| `capacity?` | `number` | (optional) the maximum queue size. If the array length is greater than the capacity, the extra elements will be ignored. |
+
+#### Returns
+
+[`CircularQueue`](README.md#circularqueue)<`T`\>
+
+a [CircularQueue](README.md#circularqueue)
+
+#### Defined in
+
+[src/lib/index.ts:182](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L182)
