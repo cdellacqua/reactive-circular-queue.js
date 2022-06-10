@@ -141,7 +141,7 @@ Usage of `replace(i, item)`:
 ```ts
 const queue = makeCircularQueue<string>(1);
 queue.enqueue('hello');
-queue.replace(0, 'world');
+console.log(queue.replace(0, 'world')); // hello
 console.log(queue.dequeue()); // world
 ```
 

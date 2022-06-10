@@ -91,7 +91,7 @@ describe('examples', () => {
 	it('readme 8', () => {
 		const queue = makeCircularQueue<string>(1);
 		queue.enqueue('hello');
-		queue.replace(0, 'world');
+		expect(queue.replace(0, 'world')).to.eq('hello'); // hello
 		expect(queue.dequeue()).to.eq('world'); // world
 	});
 	it('readme 9', () => {

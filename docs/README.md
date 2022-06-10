@@ -52,7 +52,7 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 | `enqueue` | (`v`: `T`) => `void` | - |
 | `enqueueMulti` | (`v`: `T`[]) => `void` | - |
 | `iter` | () => `Iterator`<`T`, `any`, `undefined`\> | - |
-| `replace` | (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `void` | - |
+| `replace` | (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T` | - |
 | `toArray` | () => `T`[] | - |
 
 #### Defined in
@@ -99,7 +99,7 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:163](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L163)
+[src/lib/index.ts:164](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L164)
 
 ▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
 
@@ -135,4 +135,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:182](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L182)
+[src/lib/index.ts:183](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L183)

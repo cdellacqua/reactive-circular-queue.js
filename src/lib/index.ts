@@ -111,7 +111,7 @@ export type CircularQueue<T> = {
 	 */
 	at(positiveOrNegativeIndex: number): T | undefined;
 	/**
-	 * Replace the element of a queue at the given index.
+	 * Replace the element of a queue at the given index, returning the replaced element.
 	 * The index can be positive or negative.
 	 * If the index is positive, it counts forwards from the head of the queue,
 	 * if it's negative, it counts backwards from the tail of the queue.
@@ -119,9 +119,10 @@ export type CircularQueue<T> = {
 	 * while q.replace(0, 'hello') replaces the first element.
 	 *
 	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
+	 * @returns {T} the replaced element.
 	 * @throws {RangeError} if the index is incompatible with the current queue size (i.e. the number of filled slots).
 	 */
-	replace(positiveOrNegativeIndex: number, item: T): void;
+	replace(positiveOrNegativeIndex: number, item: T): T;
 };
 
 /**
@@ -291,11 +292,15 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 		if (i >= filled || i < -filled) {
 			throw new RangeError(`${i} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
 		}
+		let previousElement: T | undefined;
 		if (i >= 0) {
+			previousElement = queue[(head + i) % capacity] as T;
 			queue[(head + i) % capacity] = item;
 		} else {
+			previousElement = queue[(head + filled + i) % capacity] as T;
 			queue[(head + filled + i) % capacity] = item;
 		}
+		return previousElement;
 	};
 
 	return {
