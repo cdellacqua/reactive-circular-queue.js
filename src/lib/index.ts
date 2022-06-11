@@ -56,13 +56,15 @@ export type CircularQueue<T> = {
 	 */
 	clear(): void;
 	/**
-	 * Add an element at the end of the queue.
+	 * Enqueue an element.
 	 * @param v a value to enqueue.
+	 * @throws {NotEnoughAvailableSlotsQueueError} if the queue is already full.
 	 */
 	enqueue(v: T): void;
 	/**
-	 * Add an array of elements at the end of the queue.
+	 * Enqueue all the elements contained in a given array.
 	 * @param v an array of values to enqueue.
+	 * @throws {NotEnoughAvailableSlotsQueueError} if the number of elements to enqueue exceeds the available space of the queue.
 	 */
 	enqueueMulti(v: T[]): void;
 	/**
@@ -70,6 +72,9 @@ export type CircularQueue<T> = {
 	 *
 	 * Note: this method also resets the reference inside the queue, so that the garbage collector
 	 * can intervene to free up some memory if necessary.
+	 *
+	 * @returns the element removed from the queue.
+	 * @throws {NotEnoughFilledSlotsQueueError} if the queue is empty.
 	 */
 	dequeue(): T;
 	/**
@@ -77,6 +82,9 @@ export type CircularQueue<T> = {
 	 *
 	 * Note: this method also resets the references inside the queue, so that the garbage collector
 	 * can intervene to free up some memory if necessary.
+	 *
+	 * @returns an array containing the elements removed from the queue.
+	 * @throws {NotEnoughFilledSlotsQueueError} if the queue contains less than the specified number of elements.
 	 */
 	dequeue(n: number): T[];
 	/**
@@ -84,6 +92,8 @@ export type CircularQueue<T> = {
 	 *
 	 * Note: this method also resets the references inside the queue, so that the garbage collector
 	 * can intervene to free up some memory if necessary.
+	 *
+	 * @returns an array containing the elements removed from the queue.
 	 */
 	dequeueAll(): T[];
 	/**
@@ -108,6 +118,7 @@ export type CircularQueue<T> = {
 	 * Note: if the index is out of bounds, this method returns undefined.
 	 *
 	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
+	 * @returns the element at the given index or undefined if the index is incompatible with the current queue size (i.e. the number of filled slots).
 	 */
 	at(positiveOrNegativeIndex: number): T | undefined;
 	/**

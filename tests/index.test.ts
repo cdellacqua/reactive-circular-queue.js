@@ -418,4 +418,23 @@ describe('circular queue', () => {
 		expect(() => q.enqueueMulti([])).not.to.throw();
 		expect(() => q.enqueueMulti([1])).to.throw(NotEnoughAvailableSlotsQueueError);
 	});
+	it('enqueues zero elements', () => {
+		const q = makeCircularQueue<number>(5);
+		expect(() => q.enqueueMulti([])).not.to.throw();
+		expect(() => q.enqueueMulti([1, 2, 3, 4, 5])).not.to.throw();
+		expect(() => q.enqueueMulti([])).not.to.throw();
+	});
+	it('dequeues zero elements', () => {
+		const q = makeCircularQueue<number>(5);
+		q.enqueueMulti([1, 2, 3, 4, 5]);
+		expect(q.filledSlots).to.eq(5);
+		expect(q.dequeue(0).length).to.eq(0);
+		expect(q.filledSlots).to.eq(5);
+	});
+	it('dequeues all elements from an empty queue', () => {
+		const q = makeCircularQueue<number>(5);
+		expect(q.filledSlots).to.eq(0);
+		expect(q.dequeueAll().length).to.eq(0);
+		expect(q.filledSlots).to.eq(0);
+	});
 });

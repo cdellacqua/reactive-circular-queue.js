@@ -99,7 +99,7 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:164](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L164)
+[src/lib/index.ts:175](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L175)
 
 ▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
 
@@ -135,4 +135,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:183](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L183)
+[src/lib/index.ts:194](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L194)
