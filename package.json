@@ -2,7 +2,7 @@
 	"name": "reactive-circular-queue",
 	"camelCaseName": "reactiveCircularQueue",
 	"description": "A circular queue implementation with reactive features and Symbol.iterator support",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"type": "module",
 	"types": "dist/index.d.ts",
 	"main": "dist/index.cjs",
