@@ -9,7 +9,7 @@ reactive-circular-queue
 - [NotEnoughAvailableSlotsQueueError](classes/NotEnoughAvailableSlotsQueueError.md)
 - [NotEnoughFilledSlotsQueueError](classes/NotEnoughFilledSlotsQueueError.md)
 
-### Type aliases
+### Type Aliases
 
 - [CircularQueue](README.md#circularqueue)
 
@@ -17,7 +17,7 @@ reactive-circular-queue
 
 - [makeCircularQueue](README.md#makecircularqueue)
 
-## Type aliases
+## Type Aliases
 
 ### CircularQueue
 
@@ -39,21 +39,21 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 | `empty$` | `ReadonlyStore`<`boolean`\> | A store that contains true if the number of filled slots is zero.  Note: a queue with a capacity of zero is always empty. |
 | `filledSlots$` | `ReadonlyStore`<`number`\> | A reactive store that contains the number of filled slots inside the queue. |
 | `full$` | `ReadonlyStore`<`boolean`\> | A reactive store that contains true if the number of filled slots equals the capacity.  Note: a queue with a capacity of zero is always full. |
-| ``get` **availableSlots**(): `number`` | `Object` | - |
-| ``get` **capacity**(): `number`` | `Object` | - |
-| ``get` **empty**(): `boolean`` | `Object` | - |
-| ``get` **filledSlots**(): `number`` | `Object` | - |
-| ``get` **full**(): `boolean`` | `Object` | - |
-| `[iterator]` | () => `Iterator`<`T`, `any`, `undefined`\> | - |
-| `at` | (`positiveOrNegativeIndex`: `number`) => `undefined` \| `T` | - |
-| `clear` | () => `void` | - |
-| `dequeue` | () => `T`(`n`: `number`) => `T`[] | - |
-| `dequeueAll` | () => `T`[] | - |
-| `enqueue` | (`v`: `T`) => `void` | - |
-| `enqueueMulti` | (`v`: `T`[]) => `void` | - |
-| `iter` | () => `Iterator`<`T`, `any`, `undefined`\> | - |
-| `replace` | (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T` | - |
-| `toArray` | () => `T`[] | - |
+| ``get` **availableSlots**(): `number`` | {} | - |
+| ``get` **capacity**(): `number`` | {} | - |
+| ``get` **empty**(): `boolean`` | {} | - |
+| ``get` **filledSlots**(): `number`` | {} | - |
+| ``get` **full**(): `boolean`` | {} | - |
+| `[iterator]` | () => `Iterator`<`T`, `any`, `undefined`\> | Return an iterator that consumes the queue by dequeueing one element at a time. |
+| `at` | (`positiveOrNegativeIndex`: `number`) => `undefined` \| `T` | Return an element of a queue given an index. The index can be positive or negative. If the index is positive, it counts forwards from the head of the queue, if it's negative, it counts backwards from the tail of the queue. As an example q.at(-1) returns the last enqueued element.  Note: if the index is out of bounds, this method returns undefined. |
+| `clear` | () => `void` | Empty the queue.  Note: this method also resets all references inside the queue, so that the garbage collector can intervene to free up some memory if necessary. |
+| `dequeue` | () => `T`(`n`: `number`) => `T`[] | Remove an element from the start of the queue.  Note: this method also resets the reference inside the queue, so that the garbage collector can intervene to free up some memory if necessary.   **`throws`** {NotEnoughFilledSlotsQueueError} if the queue is empty. |
+| `dequeueAll` | () => `T`[] | Remove all the element from the queue.  Note: this method also resets the references inside the queue, so that the garbage collector can intervene to free up some memory if necessary. |
+| `enqueue` | (`v`: `T`) => `void` | Enqueue an element.  **`throws`** {NotEnoughAvailableSlotsQueueError} if the queue is already full. |
+| `enqueueMulti` | (`v`: `T`[]) => `void` | Enqueue all the elements contained in a given array.  **`throws`** {NotEnoughAvailableSlotsQueueError} if the number of elements to enqueue exceeds the available space of the queue. |
+| `iter` | () => `Iterator`<`T`, `any`, `undefined`\> | Return an iterator that consumes the queue by dequeueing one element at a time. |
+| `replace` | (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T` | Replace the element of a queue at the given index, returning the replaced element. The index can be positive or negative. If the index is positive, it counts forwards from the head of the queue, if it's negative, it counts backwards from the tail of the queue. As an example q.replace(-1, 'hello') replaces the last enqueued element, while q.replace(0, 'hello') replaces the first element.  **`throws`** {RangeError} if the index is incompatible with the current queue size (i.e. the number of filled slots). |
+| `toArray` | () => `T`[] | Return a copy of this queue in the form of an array. |
 
 #### Defined in
 
