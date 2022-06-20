@@ -1,9 +1,9 @@
 import {makeDerivedStore, makeStore, ReadonlyStore} from 'universal-stores';
 
 /**
- * A circular queue implementation with reactive features and Symbol.iterator support.
+ * A circular queue "view" that exposes read-only methods.
  */
-export type CircularQueue<T> = {
+export type ReadonlyCircularQueue<T> = {
 	/**
 	 * Return the number of available slots inside the queue.
 	 */
@@ -48,6 +48,29 @@ export type CircularQueue<T> = {
 	 * Note: a queue with a capacity of zero is always empty.
 	 */
 	empty$: ReadonlyStore<boolean>;
+	/**
+	 * Return a copy of this queue in the form of an array.
+	 */
+	toArray(): T[];
+	/**
+	 * Return an element of a queue given an index.
+	 * The index can be positive or negative.
+	 * If the index is positive, it counts forwards from the head of the queue,
+	 * if it's negative, it counts backwards from the tail of the queue.
+	 * As an example q.at(-1) returns the last enqueued element.
+	 *
+	 * Note: if the index is out of bounds, this method returns undefined.
+	 *
+	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
+	 * @returns the element at the given index or undefined if the index is incompatible with the current queue size (i.e. the number of filled slots).
+	 */
+	at(positiveOrNegativeIndex: number): T | undefined;
+};
+
+/**
+ * A circular queue implementation with reactive features and Symbol.iterator support.
+ */
+export type CircularQueue<T> = ReadonlyCircularQueue<T> & {
 	/**
 	 * Empty the queue.
 	 *
@@ -104,23 +127,6 @@ export type CircularQueue<T> = {
 	 * Return an iterator that consumes the queue by dequeueing one element at a time.
 	 */
 	[Symbol.iterator](): Iterator<T>;
-	/**
-	 * Return a copy of this queue in the form of an array.
-	 */
-	toArray(): T[];
-	/**
-	 * Return an element of a queue given an index.
-	 * The index can be positive or negative.
-	 * If the index is positive, it counts forwards from the head of the queue,
-	 * if it's negative, it counts backwards from the tail of the queue.
-	 * As an example q.at(-1) returns the last enqueued element.
-	 *
-	 * Note: if the index is out of bounds, this method returns undefined.
-	 *
-	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
-	 * @returns the element at the given index or undefined if the index is incompatible with the current queue size (i.e. the number of filled slots).
-	 */
-	at(positiveOrNegativeIndex: number): T | undefined;
 	/**
 	 * Replace the element of a queue at the given index, returning the replaced element.
 	 * The index can be positive or negative.
