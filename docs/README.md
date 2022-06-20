@@ -12,6 +12,7 @@ reactive-circular-queue
 ### Type Aliases
 
 - [CircularQueue](README.md#circularqueue)
+- [ReadonlyCircularQueue](README.md#readonlycircularqueue)
 
 ### Functions
 
@@ -21,9 +22,27 @@ reactive-circular-queue
 
 ### CircularQueue
 
-Ƭ **CircularQueue**<`T`\>: `Object`
+Ƭ **CircularQueue**<`T`\>: [`ReadonlyCircularQueue`](README.md#readonlycircularqueue)<`T`\> & { `[iterator]`: () => `Iterator`<`T`, `any`, `undefined`\> ; `clear`: () => `void` ; `dequeue`: () => `T`(`n`: `number`) => `T`[] ; `dequeueAll`: () => `T`[] ; `enqueue`: (`v`: `T`) => `void` ; `enqueueMulti`: (`v`: `T`[]) => `void` ; `iter`: () => `Iterator`<`T`, `any`, `undefined`\> ; `replace`: (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T`  }
 
 A circular queue implementation with reactive features and Symbol.iterator support.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[src/lib/index.ts:73](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L73)
+
+___
+
+### ReadonlyCircularQueue
+
+Ƭ **ReadonlyCircularQueue**<`T`\>: `Object`
+
+A circular queue "view" that exposes read-only methods.
 
 #### Type parameters
 
@@ -44,15 +63,7 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 | ``get` **empty**(): `boolean`` | {} | - |
 | ``get` **filledSlots**(): `number`` | {} | - |
 | ``get` **full**(): `boolean`` | {} | - |
-| `[iterator]` | () => `Iterator`<`T`, `any`, `undefined`\> | Return an iterator that consumes the queue by dequeueing one element at a time. |
 | `at` | (`positiveOrNegativeIndex`: `number`) => `undefined` \| `T` | Return an element of a queue given an index. The index can be positive or negative. If the index is positive, it counts forwards from the head of the queue, if it's negative, it counts backwards from the tail of the queue. As an example q.at(-1) returns the last enqueued element.  Note: if the index is out of bounds, this method returns undefined. |
-| `clear` | () => `void` | Empty the queue.  Note: this method also resets all references inside the queue, so that the garbage collector can intervene to free up some memory if necessary. |
-| `dequeue` | () => `T`(`n`: `number`) => `T`[] | Remove an element from the start of the queue.  Note: this method also resets the reference inside the queue, so that the garbage collector can intervene to free up some memory if necessary.   **`throws`** {NotEnoughFilledSlotsQueueError} if the queue is empty. |
-| `dequeueAll` | () => `T`[] | Remove all the element from the queue.  Note: this method also resets the references inside the queue, so that the garbage collector can intervene to free up some memory if necessary. |
-| `enqueue` | (`v`: `T`) => `void` | Enqueue an element.  **`throws`** {NotEnoughAvailableSlotsQueueError} if the queue is already full. |
-| `enqueueMulti` | (`v`: `T`[]) => `void` | Enqueue all the elements contained in a given array.  **`throws`** {NotEnoughAvailableSlotsQueueError} if the number of elements to enqueue exceeds the available space of the queue. |
-| `iter` | () => `Iterator`<`T`, `any`, `undefined`\> | Return an iterator that consumes the queue by dequeueing one element at a time. |
-| `replace` | (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T` | Replace the element of a queue at the given index, returning the replaced element. The index can be positive or negative. If the index is positive, it counts forwards from the head of the queue, if it's negative, it counts backwards from the tail of the queue. As an example q.replace(-1, 'hello') replaces the last enqueued element, while q.replace(0, 'hello') replaces the first element.  **`throws`** {RangeError} if the index is incompatible with the current queue size (i.e. the number of filled slots). |
 | `toArray` | () => `T`[] | Return a copy of this queue in the form of an array. |
 
 #### Defined in
@@ -99,7 +110,7 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:175](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L175)
+[src/lib/index.ts:181](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L181)
 
 ▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
 
@@ -135,4 +146,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:194](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L194)
+[src/lib/index.ts:200](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L200)
