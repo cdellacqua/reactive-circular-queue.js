@@ -351,6 +351,11 @@ describe('circular queue', () => {
 		expect(() => q.replace(-3, 4)).to.throw(RangeError);
 		expect(q.filledSlots).to.eq(2);
 	});
+	it('tests at/replace on a queue of length 0', () => {
+		const q = makeCircularQueue<number>(0);
+		expect(q.at(0)).to.be.undefined;
+		expect(() => q.replace(0, 3)).to.throw(RangeError);
+	});
 	it('tests the return value of replace(i, item)', () => {
 		const q = makeCircularQueue<number>(5);
 		expect(q.filledSlots).to.eq(0);
