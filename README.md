@@ -25,6 +25,7 @@ array. It's often used to implement First In-First Out queues.
 - `toArray()`, to create an array containing the elements in the queue;
 - `at(index)`, to read (without dequeueing) an element in the queue at a given index (positive or negative);
 - `replace(index, item)`, to replace (without affecting the queue size) an element in the queue at a given index (positive or negative);
+- `remove(index)`, to remove an element from the queue given an index (positive or negative);
 - `iter()`, to get an iterator that dequeues elements one at a time (it also supports `Symbol.iterator`, see the example below).
 
 It also provides the following getters:
@@ -142,6 +143,16 @@ Usage of `replace(i, item)`:
 const queue = makeCircularQueue<string>(1);
 queue.enqueue('hello');
 console.log(queue.replace(0, 'world')); // hello
+console.log(queue.dequeue()); // world
+```
+
+Usage of `remove(i)`:
+
+```ts
+const queue = makeCircularQueue<string>(2);
+queue.enqueue('world');
+queue.enqueue('hello');
+console.log(queue.remove(-1)); // hello
 console.log(queue.dequeue()); // world
 ```
 

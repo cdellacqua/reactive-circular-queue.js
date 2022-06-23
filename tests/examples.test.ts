@@ -100,4 +100,11 @@ describe('examples', () => {
 		expect(queue.dequeue()).to.eq('hello'); // hello
 		expect(queue.dequeue()).to.eq('world'); // world
 	});
+	it('readme 10', () => {
+		const queue = makeCircularQueue<string>(2);
+		queue.enqueue('world');
+		queue.enqueue('hello');
+		expect(queue.remove(-1)).to.eq('hello'); // hello
+		expect(queue.dequeue()).to.eq('world'); // world
+	});
 });
