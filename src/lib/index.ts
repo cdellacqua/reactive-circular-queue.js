@@ -140,6 +140,18 @@ export type CircularQueue<T> = ReadonlyCircularQueue<T> & {
 	 * @throws {RangeError} if the index is incompatible with the current queue size (i.e. the number of filled slots).
 	 */
 	replace(positiveOrNegativeIndex: number, item: T): T;
+	/**
+	 * Remove an element from the queue given an index, returning the removed element.
+	 * The index can be positive or negative.
+	 * If the index is positive, it counts forwards from the head of the queue,
+	 * if it's negative, it counts backwards from the tail of the queue.
+	 * As an example q.remove(-1) removes the last enqueued element,
+	 * while q.remove(0) removes the first element.
+	 *
+	 * @param positiveOrNegativeIndex an index, either positive (counting from the head of the queue) or negative (counting from the tail of the queue).
+	 * @throws {RangeError} if the index is incompatible with the current queue size (i.e. the number of filled slots).
+	 */
+	remove(positiveOrNegativeIndex: number): T;
 };
 
 /**
@@ -304,19 +316,38 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 		}
 	};
 
-	const replace = (i: number, item: T) => {
+	const replace = (rawIndex: number, item: T) => {
 		const filled = filledSlots$.value;
-		if (i >= filled || i < -filled) {
-			throw new RangeError(`${i} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
+		if (rawIndex >= filled || rawIndex < -filled) {
+			throw new RangeError(`${rawIndex} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
 		}
-		let previousElement: T | undefined;
-		if (i >= 0) {
-			previousElement = queue[(head + i) % capacity] as T;
-			queue[(head + i) % capacity] = item;
+		const distanceFromHead = rawIndex >= 0 ? rawIndex : filled + rawIndex;
+		const normalizedIndex = (head + distanceFromHead) % capacity;
+		const previousElement = queue[normalizedIndex] as T;
+		queue[normalizedIndex] = item;
+		return previousElement;
+	};
+
+	const remove = (rawIndex: number) => {
+		const filled = filledSlots$.value;
+		if (rawIndex >= filled || rawIndex < -filled) {
+			throw new RangeError(`${rawIndex} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
+		}
+		const distanceFromHead = rawIndex >= 0 ? rawIndex : filled + rawIndex;
+		const normalizedIndex = (head + distanceFromHead) % capacity;
+		const previousElement = queue[normalizedIndex] as T;
+		if (filled - distanceFromHead < distanceFromHead) {
+			for (let i = head; i < head + filled - distanceFromHead - 1; i++) {
+				queue[i % capacity] = queue[(i + 1) % capacity];
+			}
+			tail = (tail + capacity - 1) % capacity;
 		} else {
-			previousElement = queue[(head + filled + i) % capacity] as T;
-			queue[(head + filled + i) % capacity] = item;
+			for (let i = head + distanceFromHead - 1; i >= head; i--) {
+				queue[(i + 1) % capacity] = queue[i % capacity];
+			}
+			head = (head + 1) % capacity;
 		}
+		filledSlots$.set(filled - 1);
 		return previousElement;
 	};
 
@@ -328,6 +359,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 		toArray,
 		at,
 		replace,
+		remove,
 		get availableSlots() {
 			return availableSlots$.value;
 		},

@@ -22,7 +22,7 @@ reactive-circular-queue
 
 ### CircularQueue
 
-Ƭ **CircularQueue**<`T`\>: [`ReadonlyCircularQueue`](README.md#readonlycircularqueue)<`T`\> & { `[iterator]`: () => `Iterator`<`T`, `any`, `undefined`\> ; `clear`: () => `void` ; `dequeue`: () => `T`(`n`: `number`) => `T`[] ; `dequeueAll`: () => `T`[] ; `enqueue`: (`v`: `T`) => `void` ; `enqueueMulti`: (`v`: `T`[]) => `void` ; `iter`: () => `Iterator`<`T`, `any`, `undefined`\> ; `replace`: (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T`  }
+Ƭ **CircularQueue**<`T`\>: [`ReadonlyCircularQueue`](README.md#readonlycircularqueue)<`T`\> & { `[iterator]`: () => `Iterator`<`T`, `any`, `undefined`\> ; `clear`: () => `void` ; `dequeue`: () => `T`(`n`: `number`) => `T`[] ; `dequeueAll`: () => `T`[] ; `enqueue`: (`v`: `T`) => `void` ; `enqueueMulti`: (`v`: `T`[]) => `void` ; `iter`: () => `Iterator`<`T`, `any`, `undefined`\> ; `remove`: (`positiveOrNegativeIndex`: `number`) => `T` ; `replace`: (`positiveOrNegativeIndex`: `number`, `item`: `T`) => `T`  }
 
 A circular queue implementation with reactive features and Symbol.iterator support.
 
@@ -110,7 +110,7 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:181](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L181)
+[src/lib/index.ts:193](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L193)
 
 ▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
 
@@ -146,4 +146,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:200](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L200)
+[src/lib/index.ts:212](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L212)
