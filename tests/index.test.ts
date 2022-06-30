@@ -531,4 +531,22 @@ describe('circular queue', () => {
 		expect(q.toArray()).to.eql([1, 3, 5]);
 		expect(q.filledSlots).to.eq(3);
 	});
+	it('tests the indexOf method', () => {
+		const q = makeCircularQueue<string>(['0', '1', '2', '3', '4', '5']);
+		expect(q.indexOf(1 as unknown as string)).to.eq(-1);
+		expect(q.indexOf('0')).to.eq(0);
+		expect(q.indexOf('2')).to.eq(2);
+		expect(q.indexOf('5')).to.eq(5);
+		q.dequeue();
+		expect(q.indexOf('5')).to.eq(4);
+		q.dequeue();
+		expect(q.indexOf('4')).to.eq(2);
+		q.dequeue();
+		expect(q.indexOf('3')).to.eq(0);
+		q.enqueue('20');
+		expect(q.indexOf('3')).to.eq(0);
+		expect(q.indexOf('20')).to.eq(3);
+		q.enqueue('20');
+		expect(q.indexOf('20')).to.eq(3);
+	});
 });

@@ -65,6 +65,13 @@ export type ReadonlyCircularQueue<T> = {
 	 * @returns the element at the given index or undefined if the index is incompatible with the current queue size (i.e. the number of filled slots).
 	 */
 	at(positiveOrNegativeIndex: number): T | undefined;
+	/**
+	 * Return the index of a given item inside the queue.
+	 *
+	 * @param searchElement the element to search in the queue.
+	 * @returns the first index at which the element is found or -1 if the element is not found.
+	 */
+	indexOf(searchElement: T): number;
 };
 
 /**
@@ -351,6 +358,16 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 		return previousElement;
 	};
 
+	const indexOf = (searchElement: T) => {
+		const filled = filledSlots$.value;
+		for (let i = 0; i < filled; i++) {
+			if (queue[(head + i) % capacity] === searchElement) {
+				return i;
+			}
+		}
+		return -1;
+	};
+
 	return {
 		enqueue,
 		enqueueMulti,
@@ -358,6 +375,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 		dequeueAll,
 		toArray,
 		at,
+		indexOf,
 		replace,
 		remove,
 		get availableSlots() {
