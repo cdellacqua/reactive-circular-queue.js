@@ -34,7 +34,7 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 
 #### Defined in
 
-[src/lib/index.ts:73](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L73)
+[src/lib/index.ts:80](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L80)
 
 ___
 
@@ -64,6 +64,7 @@ A circular queue "view" that exposes read-only methods.
 | ``get` **filledSlots**(): `number`` | {} | - |
 | ``get` **full**(): `boolean`` | {} | - |
 | `at` | (`positiveOrNegativeIndex`: `number`) => `undefined` \| `T` | Return an element of a queue given an index. The index can be positive or negative. If the index is positive, it counts forwards from the head of the queue, if it's negative, it counts backwards from the tail of the queue. As an example q.at(-1) returns the last enqueued element.  Note: if the index is out of bounds, this method returns undefined. |
+| `indexOf` | (`searchElement`: `T`) => `number` | Return the index of a given item inside the queue. |
 | `toArray` | () => `T`[] | Return a copy of this queue in the form of an array. |
 
 #### Defined in
@@ -110,7 +111,7 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:193](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L193)
+[src/lib/index.ts:200](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L200)
 
 ▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
 
@@ -146,4 +147,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:212](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L212)
+[src/lib/index.ts:219](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L219)
