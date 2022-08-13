@@ -32,12 +32,12 @@ It also provides the following stores to monitor the state of the queue:
 
 - `availableSlots$`, corresponding to the number of empty slots still available in the queue;
 - `filledSlots$`, corresponding to the number of filled slots in the queue;
-- `full$`, which corresponds to `filledSlots$.content() === capacity.content()`;
+- `full$`, which corresponds to `filledSlots$.content() === capacity`;
 - `empty$`, which corresponds to `filledSlots$.content() === 0`.
 
 Finally, there is also a `capacity` property, corresponding to the total number of slots in the queue, available or filled.
 
-The stores used in this library are [`ReadonlyStore`](https://www.npmjs.com/package/universal-stores).
+The stores used in this library are [`ReadonlyStore`](https://www.npmjs.com/package/universal-stores)s.
 
 This library provides a function called `makeCircularQueue` to create `CircularQueue<T>` objects.
 This function has two overloads:
