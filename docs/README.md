@@ -34,7 +34,7 @@ A circular queue implementation with reactive features and Symbol.iterator suppo
 
 #### Defined in
 
-[src/lib/index.ts:80](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L80)
+[src/lib/index.ts:60](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L60)
 
 ___
 
@@ -54,15 +54,11 @@ A circular queue "view" that exposes read-only methods.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `availableSlots$` | `ReadonlyStore`<`number`\> | A reactive store that contains the number of available slots inside the queue. |
+| `availableSlots$` | `ReadonlyStore`<`number`\> | A store that contains the number of available slots inside the queue. |
 | `empty$` | `ReadonlyStore`<`boolean`\> | A store that contains true if the number of filled slots is zero.  Note: a queue with a capacity of zero is always empty. |
-| `filledSlots$` | `ReadonlyStore`<`number`\> | A reactive store that contains the number of filled slots inside the queue. |
-| `full$` | `ReadonlyStore`<`boolean`\> | A reactive store that contains true if the number of filled slots equals the capacity.  Note: a queue with a capacity of zero is always full. |
-| ``get` **availableSlots**(): `number`` | {} | - |
+| `filledSlots$` | `ReadonlyStore`<`number`\> | A store that contains the number of filled slots inside the queue. |
+| `full$` | `ReadonlyStore`<`boolean`\> | A store that contains true if the number of filled slots equals the capacity.  Note: a queue with a capacity of zero is always full. |
 | ``get` **capacity**(): `number`` | {} | - |
-| ``get` **empty**(): `boolean`` | {} | - |
-| ``get` **filledSlots**(): `number`` | {} | - |
-| ``get` **full**(): `boolean`` | {} | - |
 | `at` | (`positiveOrNegativeIndex`: `number`) => `undefined` \| `T` | Return an element of a queue given an index. The index can be positive or negative. If the index is positive, it counts forwards from the head of the queue, if it's negative, it counts backwards from the tail of the queue. As an example q.at(-1) returns the last enqueued element.  Note: if the index is out of bounds, this method returns undefined. |
 | `indexOf` | (`searchElement`: `T`) => `number` | Return the index of a given item inside the queue. |
 | `toArray` | () => `T`[] | Return a copy of this queue in the form of an array. |
@@ -111,7 +107,7 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:200](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L200)
+[src/lib/index.ts:180](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L180)
 
 ▸ **makeCircularQueue**<`T`\>(`fromArray`, `capacity?`): [`CircularQueue`](README.md#circularqueue)<`T`\>
 
@@ -147,4 +143,4 @@ a [CircularQueue](README.md#circularqueue)
 
 #### Defined in
 
-[src/lib/index.ts:219](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L219)
+[src/lib/index.ts:199](https://github.com/cdellacqua/reactive-circular-queue.js/blob/main/src/lib/index.ts#L199)

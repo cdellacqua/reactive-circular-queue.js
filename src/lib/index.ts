@@ -5,19 +5,11 @@ import {makeDerivedStore, makeStore, ReadonlyStore} from 'universal-stores';
  */
 export type ReadonlyCircularQueue<T> = {
 	/**
-	 * Return the number of available slots inside the queue.
-	 */
-	get availableSlots(): number;
-	/**
-	 * A reactive store that contains the number of available slots inside the queue.
+	 * A store that contains the number of available slots inside the queue.
 	 */
 	availableSlots$: ReadonlyStore<number>;
 	/**
-	 * Return the number of filled slots inside the queue.
-	 */
-	get filledSlots(): number;
-	/**
-	 * A reactive store that contains the number of filled slots inside the queue.
+	 * A store that contains the number of filled slots inside the queue.
 	 */
 	filledSlots$: ReadonlyStore<number>;
 	/**
@@ -25,23 +17,11 @@ export type ReadonlyCircularQueue<T> = {
 	 */
 	get capacity(): number;
 	/**
-	 * Return true if the number of filled slots equals the capacity.
-	 *
-	 * Note: a queue with a capacity of zero is always full.
-	 */
-	get full(): boolean;
-	/**
-	 * A reactive store that contains true if the number of filled slots equals the capacity.
+	 * A store that contains true if the number of filled slots equals the capacity.
 	 *
 	 * Note: a queue with a capacity of zero is always full.
 	 */
 	full$: ReadonlyStore<boolean>;
-	/**
-	 * Return true if the number of filled slots is zero.
-	 *
-	 * Note: a queue with a capacity of zero is always empty.
-	 */
-	get empty(): boolean;
 	/**
 	 * A store that contains true if the number of filled slots is zero.
 	 *
@@ -241,7 +221,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	}
 
 	const enqueue = (v: T) => {
-		if (full$.value) {
+		if (full$.content()) {
 			throw new NotEnoughAvailableSlotsQueueError(1, 0);
 		}
 		queue[tail] = v;
@@ -250,7 +230,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	};
 
 	const enqueueMulti = (v: T[]) => {
-		const available = availableSlots$.value;
+		const available = availableSlots$.content();
 		if (available < v.length) {
 			throw new NotEnoughAvailableSlotsQueueError(v.length, available);
 		}
@@ -271,7 +251,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	function dequeue(): T;
 	function dequeue(n: number): T[];
 	function dequeue(items?: number) {
-		const filled = filledSlots$.value;
+		const filled = filledSlots$.content();
 		if (typeof items === 'undefined') {
 			if (filled === 0) {
 				throw new NotEnoughFilledSlotsQueueError(1, 0);
@@ -295,16 +275,16 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 			return values;
 		}
 	}
-	const dequeueAll = () => dequeue(filledSlots$.value);
+	const dequeueAll = () => dequeue(filledSlots$.content());
 
 	function* iter() {
-		while (filledSlots$.value > 0) {
+		while (filledSlots$.content() > 0) {
 			yield dequeue();
 		}
 	}
 
 	const toArray = () => {
-		const array = new Array(filledSlots$.value);
+		const array = new Array(filledSlots$.content());
 		for (let i = 0; i < array.length; i++) {
 			array[i] = queue[(head + i) % capacity];
 		}
@@ -312,7 +292,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	};
 
 	const at = (i: number) => {
-		const filled = filledSlots$.value;
+		const filled = filledSlots$.content();
 		if (i >= filled || i < -filled) {
 			return undefined;
 		}
@@ -324,7 +304,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	};
 
 	const replace = (rawIndex: number, item: T) => {
-		const filled = filledSlots$.value;
+		const filled = filledSlots$.content();
 		if (rawIndex >= filled || rawIndex < -filled) {
 			throw new RangeError(`${rawIndex} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
 		}
@@ -336,7 +316,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	};
 
 	const remove = (rawIndex: number) => {
-		const filled = filledSlots$.value;
+		const filled = filledSlots$.content();
 		if (rawIndex >= filled || rawIndex < -filled) {
 			throw new RangeError(`${rawIndex} is not a valid positive nor negative index. The number of filled slots is ${filled}`);
 		}
@@ -359,7 +339,7 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 	};
 
 	const indexOf = (searchElement: T) => {
-		const filled = filledSlots$.value;
+		const filled = filledSlots$.content();
 		for (let i = 0; i < filled; i++) {
 			if (queue[(head + i) % capacity] === searchElement) {
 				return i;
@@ -378,26 +358,12 @@ export function makeCircularQueue<T>(capacityOrArray: number | T[], optionalCapa
 		indexOf,
 		replace,
 		remove,
-		get availableSlots() {
-			return availableSlots$.value;
-		},
 		availableSlots$,
-		get filledSlots() {
-			return this.filledSlots$.value;
-		},
 		filledSlots$,
-		get capacity() {
-			return capacity;
-		},
+		capacity,
 		iter,
 		[Symbol.iterator]: iter,
-		get full() {
-			return full$.value;
-		},
 		full$,
-		get empty() {
-			return empty$.value;
-		},
 		empty$,
 		clear,
 	};

@@ -28,24 +28,24 @@ array. It's often used to implement First In-First Out queues.
 - `remove(index)`, to remove an element from the queue given an index (positive or negative);
 - `iter()`, to get an iterator that dequeues elements one at a time (it also supports `Symbol.iterator`, see the example below).
 
-It also provides the following getters:
+It also provides the following stores to monitor the state of the queue:
 
-- `availableSlots`, corresponding to the number of empty slots still available in the queue;
-- `filledSlots`, corresponding to the number of filled slots in the queue;
-- `capacity`, corresponding to the total number of slots in the queue, available or filled;
-- `full`, which corresponds to `filledSlots === capacity`;
-- `empty`, which corresponds to `filledSlots === 0`.
+- `availableSlots$`, corresponding to the number of empty slots still available in the queue;
+- `filledSlots$`, corresponding to the number of filled slots in the queue;
+- `full$`, which corresponds to `filledSlots$.content() === capacity.content()`;
+- `empty$`, which corresponds to `filledSlots$.content() === 0`.
 
-Each getters has a corresponding [`ReadonlyStore`](https://www.npmjs.com/package/universal-stores): `availableSlots$`, `filledSlots$`, `capacity$`, `full$`, `empty$`.
+Finally, there is also a `capacity` property, corresponding to the total number of slots in the queue, available or filled.
 
-These stores make this circular queue implementation reactive.
+The stores used in this library are [`ReadonlyStore`](https://www.npmjs.com/package/universal-stores).
 
 This library provides a function called `makeCircularQueue` to create `CircularQueue<T>` objects.
 This function has two overloads:
 - `makeCircularQueue(capacity)`, which takes the maximum size of the queue as its only parameter;
 - `makeCircularQueue(array, capacity)`, which takes an array that will be used to initialize the
 queue as its first parameter and a second optional parameter which is the capacity of the queue.
-If the capacity is not passed, the array length will be used to determine the maximum queue size.
+If the capacity is not passed, the array length will be used to determine the maximum queue size. If the capacity is less than the array length, only the elements that can fit into
+the queue will be added.
 
 ```ts
 import {makeCircularQueue} from 'reactive-circular-queue';
@@ -53,19 +53,19 @@ import {makeCircularQueue} from 'reactive-circular-queue';
 // Create an empty queue that can hold up to 3 items.
 const queue1 = makeCircularQueue<string>(3);
 console.log(queue1.capacity); // 3
-console.log(queue1.filledSlots); // 0
+console.log(queue1.filledSlots$.content()); // 0
 // Create a full queue that can hold up to 3 items (deduced from the array length).
 const queue2 = makeCircularQueue(['hello', 'world', '!']);
 console.log(queue2.capacity); // 3
-console.log(queue2.filledSlots); // 3
+console.log(queue2.filledSlots$.content()); // 3
 // Create an almost full queue that can hold up to 3 items (as per the second argument).
 const queue3 = makeCircularQueue(['hello', 'world'], 3);
 console.log(queue3.capacity); // 3
-console.log(queue3.filledSlots); // 2
+console.log(queue3.filledSlots$.content()); // 2
 // Create a full queue that can hold up to 2 items (as per the second argument).
 const queue4 = makeCircularQueue(['hello', 'world', '!'], 2);
 console.log(queue4.capacity); // 2
-console.log(queue4.filledSlots); // 2, only 'hello' and 'world' were copied inside the queue.
+console.log(queue4.filledSlots$.content()); // 2, only 'hello' and 'world' were copied inside the queue.
 ```
 
 ### Examples
@@ -161,9 +161,9 @@ Usage with `for..of` (`[Symbol.iterator]()`):
 ```ts
 const queue = makeCircularQueue<string>(3);
 queue.enqueueMulti(['hello', 'world']);
-console.log(queue.filledSlots); // 2
+console.log(queue.filledSlots$.content()); // 2
 for (const value of queue) {
 	console.log(value); // prints hello, then world
-	console.log(queue.filledSlots); // prints 1, then 0
+	console.log(queue.filledSlots$.content()); // prints 1, then 0
 }
 ```
