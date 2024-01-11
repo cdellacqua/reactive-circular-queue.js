@@ -71,6 +71,6 @@
 		"vite": "^2.6.4"
 	},
 	"dependencies": {
-		"universal-stores": "^2.3.0"
+		"universal-stores": "^2.3.1"
 	}
 }
