@@ -1,5 +1,7 @@
 import {makeDerivedStore, makeStore, ReadonlyStore} from 'universal-stores';
 
+export * from 'universal-stores';
+
 /**
  * A circular queue "view" that exposes read-only methods.
  */
