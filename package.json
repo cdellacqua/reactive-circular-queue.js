@@ -21,7 +21,8 @@
 		"circular"
 	],
 	"repository": {
-		"url": "git+https://github.com/cdellacqua/reactive-circular-queue.js"
+		"type": "git",
+		"url": "git+https://github.com/cdellacqua/reactive-circular-queue.js.git"
 	},
 	"bugs": {
 		"url": "https://github.com/cdellacqua/reactive-circular-queue.js/issues"
