@@ -1,11 +1,11 @@
-import {makeCircularQueue} from './lib';
+import {makeCircularQueue} from './lib/index.js';
 
 const q = makeCircularQueue(10);
 
-const div = document.createElement('div');
-document.body.appendChild(div);
+const usage = document.createElement('div');
+document.body.appendChild(usage);
 
-q.filledSlots$.subscribe((n) => (div.innerText = `usage: ${Math.floor((n * 100) / q.capacity)}%`));
+q.filledSlots$.subscribe((n) => (usage.innerText = `usage: ${Math.floor((n * 100) / q.capacity)}%`));
 
 const buttonAdd = document.createElement('button');
 buttonAdd.innerText = 'add';

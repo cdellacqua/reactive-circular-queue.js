@@ -1,4 +1,4 @@
-import {makeCircularQueue} from './lib';
+import {makeCircularQueue} from './lib/index.js';
 
 const q = makeCircularQueue(10);
 q.filledSlots$.subscribe((n) => console.log(`usage: ${Math.floor((n * 100) / q.capacity)}%`));

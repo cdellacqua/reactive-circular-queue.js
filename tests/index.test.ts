@@ -1,5 +1,4 @@
-import {expect} from 'chai';
-import {makeCircularQueue, NotEnoughAvailableSlotsQueueError, NotEnoughFilledSlotsQueueError} from '../src/lib/index';
+import {makeCircularQueue, NotEnoughAvailableSlotsQueueError, NotEnoughFilledSlotsQueueError} from '../src/lib/index.js';
 
 describe('circular queue', () => {
 	it('constructs a queue of length 0', () => {

@@ -1,5 +1,4 @@
-import {expect} from 'chai';
-import {makeCircularQueue} from '../src/lib/index';
+import {makeCircularQueue} from '../src/lib/index.js';
 
 describe('examples', () => {
 	it('readme 0', () => {
